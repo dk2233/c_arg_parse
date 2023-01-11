@@ -1,0 +1,6 @@
+#ifndef ARGUMENTS_FUNCTIONS_H
+#define ARGUMENTS_FUNCTIONS_H
+
+
+#endif
+
