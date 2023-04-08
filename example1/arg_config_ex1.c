@@ -15,8 +15,8 @@ such specific array is needed to be created
 name is important
 also always leave one empty line*/
 argument_config_t arg_config[] = {
-    {"-a" , .function_to_parse.function_arg_array = argument_array, "give an array size to be listed"},
-    {"-sum" , .function_to_parse.function_arg_array = argument_sum, "give a number you want to sum like -sum4+5"},
-    {"", NULL, NULL}, /* this line is a marker of last element*/
+    {"-a" ,  .function_to_parse.function_arg_char = argument_array, "give an array size to be listed", 1, 0, },
+    {"-sum" ,  .function_to_parse.function_arg_char = argument_sum, "give a number you want to sum like -sum4+5",1, 0},
+    {"", NULL,  NULL, 0 , 0}, /* this line is a marker of last element*/
 
 };
