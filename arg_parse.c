@@ -6,7 +6,12 @@
 
 void parser_arguments(int argc, char * argv[])
 {
-    for(int i = 1; i < argc; i++)
+    #define START_ARGC_LOOP 1U
+
+    uint8_t first_loop = 0;
+    /* first loop suits a method of call no parameter function 
+    that may have influence on other arguments*/
+    for(int i = START_ARGC_LOOP; i < argc; i++)
     {
 
         for (int arg = 0; (arg_config[arg].function_to_parse.function_arg_char != NULL); arg++)
@@ -19,26 +24,45 @@ void parser_arguments(int argc, char * argv[])
 
                 if (data_from_commandline != NULL)
                 {
-                    char *parameter_begin = (char *)argv[i] + strlen(arg_config[arg].parameter);
-                    data_from_commandline = strcpy(data_from_commandline, parameter_begin);
-
-                    if (strlen(data_from_commandline) < 1)
+                    if((first_loop != 0 ) && (arg_config[arg].arg_without_value == 0) )
                     {
-                        /* data is in next argv[]*/
-                        i++;
-                        data_from_commandline = (char*)realloc(data_from_commandline, strlen(argv[i]) + 1);
-                        data_from_commandline = strcpy(data_from_commandline,argv[i]);
+                        char *parameter_begin = (char *)argv[i] + strlen(arg_config[arg].parameter);
+                        data_from_commandline = strcpy(data_from_commandline, parameter_begin);
 
+                        if (strlen(data_from_commandline) < 1)
+                        {
+                            /* data is in next argv[]*/
+                            i++;
+                            data_from_commandline = (char *)realloc(data_from_commandline, strlen(argv[i]) + 1);
+                            data_from_commandline = strcpy(data_from_commandline, argv[i]);
+                        }
+
+                        arg_config[arg].function_to_parse.function_arg_char(data_from_commandline);
+                        free(data_from_commandline);
                     }
-
-                    arg_config[arg].function_to_parse.function_arg_char(data_from_commandline);
-                    free(data_from_commandline);
+                    else if ( (first_loop == 0) && ( arg_config[arg].arg_without_value == 1 ) )
+                    {
+                        arg_config[arg].function_to_parse.function_arg_void();
+                        
+                    }
+                    else
+                    {
+                        /* nothing*/
+                    }
                 }
                 else 
                 {
                     perror("Cannot allocate memory for \n");
                 }
             }
+        }
+
+        /* check if last cmd parameter was reached and if first loop start from the beginning*/
+        if ( (i == (argc -1 ) ) 
+        && (first_loop < 1) )
+        {
+            i = START_ARGC_LOOP - 1;
+            first_loop++;
         }
     }
 

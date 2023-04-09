@@ -6,6 +6,8 @@
 #include <stdlib.h>
 
 bool create_array(void ** tab, int size_of_array, size_t size_of_one_element );
+int verbose_is_enabled = 0;
+
 
 int main(int argc, char *argv[])
 {
@@ -33,6 +35,10 @@ void argument_array(char * argv_parameter)
             {
                 new_tab[0] = 10;
             }
+                if (verbose_is_enabled == 1)
+                {
+                    printf("I am showing array elements \n");
+                }
             for(int i = 0 ; i < nr; i++ )
             {
                 printf("%d\n",new_tab[i]);
@@ -104,6 +110,18 @@ void argument_sum(char *param)
 
     printf("sum %d \n",sum);
     free(tab);
+
+
+}
+
+void set_global_option(void)
+{
+
+/* this function sets some global variable that influnces 
+how other arg parsers works*/
+
+    verbose_is_enabled = 1;
+
 
 
 }
